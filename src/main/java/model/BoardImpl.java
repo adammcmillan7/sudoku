@@ -1,15 +1,18 @@
 package model;
 
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardImpl {
     private int[][] board;
     private int[][] status;
+    private List<Observer> observers;
 
     public BoardImpl(int[][] board){
         this.board = board;
         this.status = new int[9][9];
-
+        observers = new ArrayList<>(10);
         for (int r = 0;r< 9;r++){
             for (int c=0;c< 9;c++){
                 if (board[r][c] !=0){
@@ -48,6 +51,7 @@ public class BoardImpl {
         }
         board[r][c] = 0;
         status[r][c] = 0;
+        notifyObservers();
 
     }
 
@@ -61,6 +65,7 @@ public class BoardImpl {
                 }
             }
         }
+        notifyObservers();
 
     }
 
@@ -70,6 +75,7 @@ public class BoardImpl {
         }
         board[r][c] = value;
         status[r][c] = 1;
+        notifyObservers();
     }
 
     public boolean isRowLegal(int r){
@@ -150,5 +156,21 @@ public class BoardImpl {
             return true;
         }
         return false;
+    }
+
+    private void notifyObservers() {
+        if (!observers.isEmpty()) {
+            for (Observer observer : observers) {
+                observer.update(this);
+            }
+        }
+    }
+
+    public void addObserver(Observer observer){
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer){
+        observers.remove(observer);
     }
 }
