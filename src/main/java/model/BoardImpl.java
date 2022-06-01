@@ -126,7 +126,29 @@ public class BoardImpl {
                 if (board[i][j] == 0){
                     return false;
                 }
-                if (board[i][j] == i+1){
+                if (found[board[i][j]-1]==1){
+                    return false;
+                }
+                found[board[i][j]-1] = 1;
+            }
+        }
+        return true;
+    }
+
+
+    /** use to evaluate partially filled grids, rows, and columns **/
+    public boolean isCellLegal(int r, int c){
+        if (getValue(r,c)>9){
+            return false;
+        }
+
+        //row
+        int[] row = board[r];
+        int[] found = new int[9];
+
+        for (int i=0;i<9;i++){
+            for (int ci=0;ci<9;ci++){
+                if (row[ci] == i+1){
                     if (found[i] == 1){
                         return false;
                     }
@@ -134,6 +156,38 @@ public class BoardImpl {
                 }
             }
         }
+
+        //col
+        int[] foundc = new int[9];
+
+        for (int i=0;i<9;i++){
+            for (int ri=0;ri<9;ri++){
+                if (board[ri][c] == i+1){
+                    if (foundc[i] == 1){
+                        return false;
+                    }
+                    foundc[i] = 1;
+                }
+            }
+        }
+/*
+        //grid
+        int grid_r = (r/3) * 3;
+        int grid_c = (c/3) * 3;
+
+
+        int[] foundg = new int[9];
+
+        for (int i=grid_r;i<grid_r+3;i++){
+            for (int j=grid_c;j<grid_c+3;j++){
+                if (board[i][j] == i+1){
+                    if (foundg[i] == 1){
+                        return false;
+                    }
+                    foundg[i] = 1;
+                }
+            }
+        }*/
         return true;
     }
 
@@ -172,5 +226,14 @@ public class BoardImpl {
 
     public void removeObserver(Observer observer){
         observers.remove(observer);
+    }
+
+    public void printBoard(){
+        for (int r=0;r<9;r++){
+            for (int c=0;c<9;c++){
+                System.out.print(board[r][c] + " ");
+            }
+            System.out.print('\n');
+        }
     }
 }

@@ -30,7 +30,7 @@ public class App extends Application {
 
 
         //scene
-        Scene scene = new Scene();
+        /*Scene scene = new Scene();
         scene.getStylesheets().add();
         stage.setScene(scene);
 
@@ -39,7 +39,7 @@ public class App extends Application {
             scene.setRoot(app.render());
         });
 
-        stage.show();
+        stage.show();*/
 
 
     }
