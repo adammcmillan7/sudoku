@@ -9,6 +9,13 @@ public class BoardImpl {
     private int[][] status;
     private List<Observer> observers;
 
+    /* board: array of cell values 0-9
+        status: array of status # 0-2.
+            0: blank
+            1: user edited
+            2: clue cell
+     */
+
     public BoardImpl(int[][] board){
         this.board = board;
         this.status = new int[9][9];
@@ -235,5 +242,9 @@ public class BoardImpl {
             }
             System.out.print('\n');
         }
+    }
+
+    public int getStatus(int r, int c){
+        return status[r][c];
     }
 }

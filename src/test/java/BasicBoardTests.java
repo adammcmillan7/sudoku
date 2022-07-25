@@ -1,6 +1,6 @@
 import model.BoardImpl;
 import model.BoardLib;
-import model.BruteSolve;
+//import model.BruteSolve;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -28,6 +28,17 @@ public class BasicBoardTests {
             {4,5,6,0,0,0,0,0,8},
             {1,2,3,4,5,6,7,8,9}};
 
+    int[][] board3 = {
+            {1,2,2,4,5,6,7,8,8},
+            {1,2,3,4,5,6,7,8,9},
+            {9,8,7,6,5,4,3,2,1},
+            {9,8,7,6,5,4,3,2,1},
+            {1,2,2,4,5,6,7,8,8},
+            {1,2,3,4,5,6,7,8,9},
+            {9,8,7,6,5,4,3,2,1},
+            {9,8,7,6,5,4,3,2,1},
+            {4,5,6,0,0,0,0,0,8}};
+
     @Test
     public void emptyBoard(){
         BoardImpl bimpl1 = new BoardImpl(board1);
@@ -35,6 +46,16 @@ public class BasicBoardTests {
         for (int r=0;r<9;r++){
             for (int c=0;c<9;c++){
                 assertEquals(0,bimpl1.getValue(r,c));
+                assertEquals(0,bimpl1.getStatus(r,c));
+            }
+        }
+
+        BoardImpl bimpl3 = new BoardImpl(board3);
+
+        for (int r=0;r<8;r++){
+            for (int c=0;c<9;c++){
+                assertNotEquals(0,bimpl3.getValue(r,c));
+                assertEquals(2,bimpl3.getStatus(r,c));
             }
         }
     }
@@ -47,11 +68,13 @@ public class BasicBoardTests {
         for (int r=0;r<9;r++){
             for (int c=0;c<9;c++){
                 assertFalse(bimpl1.isClue(r,c));
+                assertNotEquals(2,bimpl1.getStatus(r,c));
             }
         }
 
         for (int c=0;c<9;c++){
             assertTrue(bimpl2.isClue(8,c));
+            assertEquals(2,bimpl2.getStatus(8,c));
         }
     }
 
@@ -59,12 +82,15 @@ public class BasicBoardTests {
     public void basicBoard(){
         BoardImpl bimpl2 = new BoardImpl(board2);
 
-        for (int c=0;c<9;c++){
+        for (int c=0;c<8;c++){
             assertEquals(0,bimpl2.getValue(1,c));
+            assertEquals(0,bimpl2.getStatus(1,c));
         }
 
         assertEquals(1,bimpl2.getValue(0,2));
+        assertEquals(2,bimpl2.getStatus(0,2));
         assertEquals(5,bimpl2.getValue(2,5));
+        assertEquals(2,bimpl2.getStatus(2,5));
         assertEquals(7,bimpl2.getValue(4,1));
         assertEquals(7,bimpl2.getValue(8,6));
     }
@@ -72,13 +98,10 @@ public class BasicBoardTests {
     @Test
     public void editNum(){
         BoardImpl bimpl = new BoardImpl(board2);
-        bimpl.printBoard();
-        System.out.print('\n');
 
         bimpl.editNum(0,0,5);
         assertEquals(5,bimpl.getValue(0,0));
         assertFalse(bimpl.isClue(0,0));
-        bimpl.printBoard();
 
         //cannot edit a clue cell
         assertTrue(bimpl.isClue(0,2));
@@ -152,23 +175,23 @@ public class BasicBoardTests {
     @Test
     public void brute(){
         BoardImpl bimpl = new BoardImpl(BoardLib.board1);
-        BruteSolve brute = new BruteSolve(bimpl);
-        assertFalse(bimpl.isGridLegal(0,0));
-        assertTrue(bimpl.isCellLegal(0,0));
+    }
 
-        /*brute.next();
-        brute.next();
-        brute.next();
-        brute.previous();*/
-        brute.solve();
+    @Test
+    public void removeNum(){
+        BoardImpl bimpl = new BoardImpl(BoardLib.board1);
 
-        for (int r=0;r<9;r++){
-            for (int c=0;c<9;c++){
-                System.out.print(bimpl.getValue(r,c)+ " ");
-            }
-            System.out.print('\n');
-        }
+        //can't remove a clue
+        assertEquals(5,bimpl.getValue(0,0));
+        bimpl.removeNum(0,0);
+        assertEquals(5,bimpl.getValue(0,0));
 
+        //regular cell
+        assertEquals(0,bimpl.getValue(0,8));
+        bimpl.editNum(0,8,9);
+        assertEquals(9,bimpl.getValue(0,8));
+        bimpl.removeNum(0,8);
+        assertEquals(0,bimpl.getValue(0,8));
     }
 
 }
