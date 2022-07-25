@@ -18,44 +18,43 @@ public class BoardImpl {
             2: clue cell
      */
 
-    public BoardImpl(int[][] board){
+    public BoardImpl(int[][] board) {
         this.board = board;
         this.status = new int[9][9];
         observers = new ArrayList<>(10);
-        for (int r = 0;r< 9;r++){
-            for (int c=0;c< 9;c++){
-                if (board[r][c] !=0){
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                if (board[r][c] != 0) {
                     status[r][c] = 2;
-                }
-                else status[r][c] = 0;
+                } else status[r][c] = 0;
             }
         }
     }
 
-    public boolean isSolved(){
-        for (int r=0;r<9;r++){
-            if (!isRowLegal(r)){
+    public boolean isSolved() {
+        for (int r = 0; r < 9; r++) {
+            if (!isRowLegal(r)) {
                 return false;
             }
         }
-        for (int c=0;c<9;c++){
-            if (!isColumnLegal(c)){
+        for (int c = 0; c < 9; c++) {
+            if (!isColumnLegal(c)) {
                 return false;
             }
         }
-        for (int i=0,j=0;i<9;){
-            if (!isGridLegal(i,j)){
+        for (int i = 0, j = 0; i < 9; ) {
+            if (!isGridLegal(i, j)) {
                 return false;
             }
-            i +=3;
-            j +=3;
+            i += 3;
+            j += 3;
         }
         return true;
     }
 
 
-    public void removeNum(int r, int c){
-        if (isClue(r,c)){
+    public void removeNum(int r, int c) {
+        if (isClue(r, c)) {
             return;
         }
         board[r][c] = 0;
@@ -64,11 +63,11 @@ public class BoardImpl {
 
     }
 
-    public void reset(){
+    public void reset() {
 
-        for (int r=0;r<9;r++){
-            for (int c=0;c<9;c++){
-                if (status[r][c] != 2){
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                if (status[r][c] != 2) {
                     board[r][c] = 0;
                     status[r][c] = 0;
                 }
@@ -78,8 +77,8 @@ public class BoardImpl {
 
     }
 
-    public void editNum(int r, int c, int value){
-        if (isClue(r,c)){
+    public void editNum(int r, int c, int value) {
+        if (isClue(r, c)) {
             return;
         }
         board[r][c] = value;
@@ -87,17 +86,17 @@ public class BoardImpl {
         notifyObservers();
     }
 
-    public boolean isRowLegal(int r){
+    public boolean isRowLegal(int r) {
         int[] row = board[r];
         int[] found = new int[9];
 
-        for (int i=0;i<9;i++){
-            for (int c=0;c<9;c++){
-                if (row[c] == 0){
+        for (int i = 0; i < 9; i++) {
+            for (int c = 0; c < 9; c++) {
+                if (row[c] == 0) {
                     return false;
                 }
-                if (row[c] == i+1){
-                    if (found[i] == 1){
+                if (row[c] == i + 1) {
+                    if (found[i] == 1) {
                         return false;
                     }
                     found[i] = 1;
@@ -107,16 +106,16 @@ public class BoardImpl {
         return true;
     }
 
-    public boolean isColumnLegal(int c){
+    public boolean isColumnLegal(int c) {
         int[] found = new int[9];
 
-        for (int i=0;i<9;i++){
-            for (int r=0;r<9;r++){
-                if (board[r][c] == 0){
+        for (int i = 0; i < 9; i++) {
+            for (int r = 0; r < 9; r++) {
+                if (board[r][c] == 0) {
                     return false;
                 }
-                if (board[r][c] == i+1){
-                    if (found[i] == 1){
+                if (board[r][c] == i + 1) {
+                    if (found[i] == 1) {
                         return false;
                     }
                     found[i] = 1;
@@ -126,30 +125,34 @@ public class BoardImpl {
         return true;
     }
 
-    /** grid is a 3x3 square, input r,c is the upper left corner **/
-    public boolean isGridLegal(int r, int c){
+    /**
+     * grid is a 3x3 square, input r,c is the upper left corner
+     **/
+    public boolean isGridLegal(int r, int c) {
         int[] found = new int[9];
 
-        for (int i=r;i<r+3;i++){
-            for (int j=c;j<c+3;j++){
-                if (board[i][j] == 0){
+        for (int i = r; i < r + 3; i++) {
+            for (int j = c; j < c + 3; j++) {
+                if (board[i][j] == 0) {
                     return false;
                 }
-                if (found[board[i][j]-1]==1){
+                if (found[board[i][j] - 1] == 1) {
                     return false;
                 }
-                found[board[i][j]-1] = 1;
+                found[board[i][j] - 1] = 1;
             }
         }
         return true;
     }
 
 
-    /** use to evaluate partially filled grids, rows, and columns
-     * 0s will pass as legal ... so will unsolved boards**/
+    /**
+     * use to evaluate partially filled grids, rows, and columns
+     * 0s will pass as legal ... so will unsolved boards
+     **/
 
-    public boolean isCellLegal(int r, int c){
-        if (getValue(r,c)>9){
+    public boolean isCellLegal(int r, int c) {
+        if (getValue(r, c) > 9) {
             return false;
         }
 
@@ -157,10 +160,10 @@ public class BoardImpl {
         int[] row = board[r];
         int[] found = new int[9];
 
-        for (int i=0;i<9;i++){
-            for (int ci=0;ci<9;ci++){
-                if (row[ci] == i+1){
-                    if (found[i] == 1){
+        for (int i = 0; i < 9; i++) {
+            for (int ci = 0; ci < 9; ci++) {
+                if (row[ci] == i + 1) {
+                    if (found[i] == 1) {
                         return false;
                     }
                     found[i] = 1;
@@ -171,10 +174,10 @@ public class BoardImpl {
         //col
         int[] foundc = new int[9];
 
-        for (int i=0;i<9;i++){
-            for (int ri=0;ri<9;ri++){
-                if (board[ri][c] == i+1){
-                    if (foundc[i] == 1){
+        for (int i = 0; i < 9; i++) {
+            for (int ri = 0; ri < 9; ri++) {
+                if (board[ri][c] == i + 1) {
+                    if (foundc[i] == 1) {
                         return false;
                     }
                     foundc[i] = 1;
@@ -183,16 +186,16 @@ public class BoardImpl {
         }
 
         //grid
-        int grid_r = (r/3) * 3;
-        int grid_c = (c/3) * 3;
+        int grid_r = (r / 3) * 3;
+        int grid_c = (c / 3) * 3;
 
 
         int[] foundg = new int[10];
 
 
-        for (int i=grid_r;i<grid_r+3;i++){
-            for (int j=grid_c;j<grid_c+3;j++){
-                if (foundg[board[i][j]] != 0){
+        for (int i = grid_r; i < grid_r + 3; i++) {
+            for (int j = grid_c; j < grid_c + 3; j++) {
+                if (foundg[board[i][j]] != 0) {
                     return false;
                 }
                 foundg[board[i][j]] += board[i][j];
@@ -201,22 +204,22 @@ public class BoardImpl {
         return true;
     }
 
-    public int getValue(int r, int c){
-        if(isEmpty(r,c)){
+    public int getValue(int r, int c) {
+        if (isEmpty(r, c)) {
             return 0;
         }
         return board[r][c];
     }
 
-    public boolean isClue(int r, int c){
-        if (status[r][c] == 2){
+    public boolean isClue(int r, int c) {
+        if (status[r][c] == 2) {
             return true;
         }
         return false;
     }
 
-    private boolean isEmpty(int r, int c){
-        if (status[r][c] == 0){
+    private boolean isEmpty(int r, int c) {
+        if (status[r][c] == 0) {
             return true;
         }
         return false;
@@ -230,24 +233,96 @@ public class BoardImpl {
         }
     }
 
-    public void addObserver(Observer observer){
+    public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(Observer observer){
+    public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
-    public void printBoard(){
-        for (int r=0;r<9;r++){
-            for (int c=0;c<9;c++){
+    public void printBoard() {
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
                 System.out.print(board[r][c] + " ");
             }
             System.out.print('\n');
         }
+        System.out.print('\n');
+
     }
 
-    public int getStatus(int r, int c){
+    public int getStatus(int r, int c) {
         return status[r][c];
+    }
+
+    public int[][] bruteSolve() {
+        int r = 0;
+        int c = 0;
+        int dir = 1;
+        int count = 0;
+        while (!isSolved()) {
+            //clue cell
+            printBoard();
+            count += 1;
+            if (isClue(r,c)){
+                //skip this cell
+                //todo last/first catch
+                c += dir;
+                if (c > 8){
+                    r += 1;
+                    c = 0;
+                }
+                if (c < 0){
+                    r -= 1;
+                    c = 8;
+                }
+            }
+            //not a clue cell
+            else{
+                //increment 1 to the value
+                editNum(r,c,getValue(r,c)+1);
+
+                //check if cell is legal
+                if (isCellLegal(r,c)){
+                    //cell is legal
+                    //if we're reversing we can stop
+                    if (dir < 0){
+                        dir = 1;
+                    }
+                    //advance to next cell
+                    c += dir;
+                    if (c > 8){
+                        r += 1;
+                        c = 0;
+                    }
+                    if (c < 0){
+                        r -= 1;
+                        c = 8;
+                    }
+                }
+                else{
+                    //cell is illegal
+                    if (getValue(r,c)>9){
+                        //value too large. set to 0 and reverse direction
+                        editNum(r,c,0);
+                        dir = -1;
+                        c += dir;
+                        if (c > 8){
+                            r += 1;
+                            c = 0;
+                        }
+                        if (c < 0){
+                            r -= 1;
+                            c = 8;
+                        }
+                    }
+                    //increment again (restart loop)
+                }
+            }
+        }
+        return board;
+
+
     }
 }

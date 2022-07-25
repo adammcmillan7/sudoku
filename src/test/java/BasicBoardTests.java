@@ -254,4 +254,17 @@ public class BasicBoardTests {
         }
     }
 
+    @Test
+    public void bruteSolve(){
+        BoardImpl bimpl = new BoardImpl(BoardLib.board1);
+
+        int[][] sol = bimpl.bruteSolve();
+        assertTrue(bimpl.isSolved());
+        for (int r=0;r<9;r++){
+            for (int c=0;c<9;c++){
+                assertEquals(BoardLib.board1sol[r][c],sol[r][c]);
+            }
+        }
+    }
+
 }
