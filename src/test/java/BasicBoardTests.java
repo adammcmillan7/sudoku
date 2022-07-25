@@ -194,4 +194,25 @@ public class BasicBoardTests {
         assertEquals(0,bimpl.getValue(0,8));
     }
 
+    @Test
+    public void resetTest(){
+        BoardImpl bimpl = new BoardImpl(board1);
+
+        //change a blank board to all 5s
+        for (int r=0;r<9;r++){
+            for (int c=0;c<9;c++){
+                bimpl.editNum(r,c,5);
+            }
+        }
+
+        bimpl.reset();
+        for (int r=0;r<9;r++){
+            for (int c=0;c<9;c++){
+                assertEquals(0,bimpl.getValue(r,c));
+            }
+        }
+
+
+    }
+
 }
