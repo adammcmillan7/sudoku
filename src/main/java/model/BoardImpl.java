@@ -2,7 +2,9 @@ package model;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class BoardImpl {
     private int[][] board;
@@ -143,7 +145,9 @@ public class BoardImpl {
     }
 
 
-    /** use to evaluate partially filled grids, rows, and columns **/
+    /** use to evaluate partially filled grids, rows, and columns
+     * 0s will pass as legal ... so will unsolved boards**/
+
     public boolean isCellLegal(int r, int c){
         if (getValue(r,c)>9){
             return false;
@@ -177,24 +181,23 @@ public class BoardImpl {
                 }
             }
         }
-/*
+
         //grid
         int grid_r = (r/3) * 3;
         int grid_c = (c/3) * 3;
 
 
-        int[] foundg = new int[9];
+        int[] foundg = new int[10];
+
 
         for (int i=grid_r;i<grid_r+3;i++){
             for (int j=grid_c;j<grid_c+3;j++){
-                if (board[i][j] == i+1){
-                    if (foundg[i] == 1){
-                        return false;
-                    }
-                    foundg[i] = 1;
+                if (foundg[board[i][j]] != 0){
+                    return false;
                 }
+                foundg[board[i][j]] += board[i][j];
             }
-        }*/
+        }
         return true;
     }
 
